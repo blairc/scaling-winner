@@ -3,9 +3,293 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hello, World</title>
+    <title>Basketball GM AI Assistant Proposal</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f7f9fc;
+        --text: #1f2937;
+        --muted: #4b5563;
+        --card: #ffffff;
+        --border: #dbe3f0;
+        --accent: #2563eb;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 2rem 1rem 3rem;
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        line-height: 1.55;
+      }
+
+      main {
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      h1,
+      h2,
+      h3 {
+        line-height: 1.25;
+        margin-top: 0;
+      }
+
+      h1 {
+        font-size: clamp(1.8rem, 2.8vw, 2.5rem);
+      }
+
+      h2 {
+        margin-top: 2rem;
+        font-size: 1.35rem;
+      }
+
+      h3 {
+        margin-top: 1.3rem;
+        font-size: 1.1rem;
+      }
+
+      p,
+      li {
+        color: var(--muted);
+      }
+
+      .intro {
+        background: linear-gradient(135deg, #f0f6ff, #f8fbff);
+        border: 1px solid #d5e7ff;
+        padding: 1.5rem;
+        border-radius: 0.85rem;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1rem;
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 0.75rem;
+        padding: 1rem;
+      }
+
+      code {
+        background: #eef2ff;
+        padding: 0.1rem 0.35rem;
+        border-radius: 0.3rem;
+        color: #1e3a8a;
+      }
+
+      .phase {
+        border-left: 4px solid var(--accent);
+        padding-left: 0.9rem;
+        margin: 1rem 0;
+      }
+
+      .risk {
+        border-left-color: #c2410c;
+      }
+
+      .success {
+        border-left-color: #15803d;
+      }
+
+      footer {
+        margin-top: 2.2rem;
+        font-size: 0.95rem;
+      }
+    </style>
   </head>
   <body>
-    <h1 style="text-align: center;">Hello, World</h1>
+    <main>
+      <section class="intro">
+        <h1>Proposal: AI Assistant for Basketball GM</h1>
+        <p>
+          Build an optional, low-friction assistant layer that helps with roster
+          decisions, lineup suggestions, and long-term planning while keeping the
+          "you are still the GM" spirit of Basketball GM.
+        </p>
+      </section>
+
+      <h2>1. Product Vision</h2>
+      <p>
+        The assistant should reduce repetitive work without removing player agency.
+        Instead of auto-playing the game, it should provide concise recommendations,
+        confidence scores, and one-click actions for common workflows.
+      </p>
+      <div class="grid">
+        <div class="card">
+          <h3>Design Principle: Advisory-First</h3>
+          <p>
+            Default behavior is suggestion + rationale. Full automation can be
+            explicitly enabled per workflow.
+          </p>
+        </div>
+        <div class="card">
+          <h3>Design Principle: Context-Aware</h3>
+          <p>
+            Recommendations adapt to team state (contending vs rebuilding), contract
+            windows, injuries, and league economics.
+          </p>
+        </div>
+        <div class="card">
+          <h3>Design Principle: Reversible</h3>
+          <p>
+            Every assistant action should be previewable and easy to undo from a
+            session log.
+          </p>
+        </div>
+      </div>
+
+      <h2>2. Core Use Cases (Basketball GM First)</h2>
+      <div class="phase">
+        <h3>Roster + Rotation Triage</h3>
+        <ul>
+          <li>Who should start/bench based on current roster and chemistry goals.</li>
+          <li>Minute allocation suggestions with fatigue and development weighting.</li>
+          <li>"What changed?" explanations after major injuries or trades.</li>
+        </ul>
+      </div>
+      <div class="phase">
+        <h3>Trade Assistant</h3>
+        <ul>
+          <li>Generate realistic trade targets for selected strategy (win-now/rebuild).</li>
+          <li>
+            Show expected value change: short-term wins, future assets, payroll impact.
+          </li>
+          <li>Rank candidate offers and provide a risk breakdown.</li>
+        </ul>
+      </div>
+      <div class="phase">
+        <h3>Contract + Cap Management</h3>
+        <ul>
+          <li>Highlight extension candidates and likely negotiation outcomes.</li>
+          <li>Warn about future cap crunches and tax risk timelines.</li>
+          <li>Suggest cap-preserving alternatives to expensive moves.</li>
+        </ul>
+      </div>
+      <div class="phase">
+        <h3>Draft Support</h3>
+        <ul>
+          <li>Draft board recommendations by team timeline and roster needs.</li>
+          <li>Trade-up/trade-down prompts with expected value delta.</li>
+          <li>Post-draft development plan template for rookies.</li>
+        </ul>
+      </div>
+
+      <h2>3. Technical Architecture Options</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Option A: Client-Side Userscript (Fastest)</h3>
+          <p>
+            Build as a Tampermonkey/Greasemonkey script injected into
+            <code>basketball-gm.com</code>. Read in-game state from existing data
+            stores and overlay a lightweight assistant panel.
+          </p>
+          <p><strong>Pros:</strong> quick to prototype, private by default, no backend required.</p>
+          <p><strong>Cons:</strong> brittle against upstream UI/internal API changes.</p>
+        </div>
+        <div class="card">
+          <h3>Option B: Browser Extension (Recommended)</h3>
+          <p>
+            Package assistant as an extension with content script + isolated UI.
+            Enables better permissions, settings sync, and controlled updates.
+          </p>
+          <p><strong>Pros:</strong> robust UX, easier distribution/versioning.</p>
+          <p><strong>Cons:</strong> higher initial engineering overhead.</p>
+        </div>
+        <div class="card">
+          <h3>Option C: Optional Companion Service</h3>
+          <p>
+            Add a small backend for heavy analysis and model orchestration when
+            users opt in.
+          </p>
+          <p><strong>Pros:</strong> stronger modeling, cross-save analytics.</p>
+          <p><strong>Cons:</strong> privacy + hosting complexity.</p>
+        </div>
+      </div>
+
+      <h2>4. AI Strategy</h2>
+      <p>
+        Use a hybrid approach rather than pure LLM decision-making:
+      </p>
+      <ul>
+        <li>
+          <strong>Deterministic engine:</strong> cap math, roster constraints,
+          legality checks, and simulation-based scoring.
+        </li>
+        <li>
+          <strong>LLM layer:</strong> convert structured analysis into short,
+          readable recommendations and answer "why" questions.
+        </li>
+        <li>
+          <strong>Policy layer:</strong> user-defined style sliders (aggressive,
+          balanced, conservative) that modulate recommendations.
+        </li>
+      </ul>
+
+      <h2>5. Phased Delivery Plan</h2>
+      <div class="phase success">
+        <h3>Phase 0 (1-2 weeks): Feasibility Spike</h3>
+        <p>
+          Build a local userscript proof-of-concept that reads roster + payroll,
+          then suggests a depth chart with explanation text.
+        </p>
+      </div>
+      <div class="phase success">
+        <h3>Phase 1 (2-4 weeks): MVP Assistant Panel</h3>
+        <p>
+          Add lineup recommendations, basic trade target ranking, and action history.
+        </p>
+      </div>
+      <div class="phase success">
+        <h3>Phase 2 (4-8 weeks): Strategic Features</h3>
+        <p>
+          Add contract forecasting, draft board support, and scenario simulation.
+        </p>
+      </div>
+      <div class="phase risk">
+        <h3>Phase 3: Harden + Extend to Other Zen GM Games</h3>
+        <p>
+          Extract a shared core and adapt sport-specific modules for Football GM,
+          Baseball, and Hockey variants.
+        </p>
+      </div>
+
+      <h2>6. Key Risks and Mitigations</h2>
+      <ul>
+        <li>
+          <strong>Upstream game updates break integrations:</strong> isolate data
+          access behind adapters and add regression tests.
+        </li>
+        <li>
+          <strong>Over-automation hurts fun:</strong> keep recommendations concise,
+          optional, and user-tunable.
+        </li>
+        <li>
+          <strong>Trust gap:</strong> always show rationale + confidence + fallback
+          alternatives.
+        </li>
+      </ul>
+
+      <h2>7. Immediate Next Steps</h2>
+      <ol>
+        <li>Choose delivery mode: userscript (speed) vs extension (durability).</li>
+        <li>Define data contract from Basketball GM state to assistant engine.</li>
+        <li>Implement first workflow: roster/rotation recommendation.</li>
+        <li>Run with 3-5 test franchises (contender, mid-tier, rebuild, cap-strained).</li>
+      </ol>
+
+      <footer>
+        This proposal is intentionally Basketball GM-first, with architecture that can
+        later generalize across the broader Zen GM ecosystem.
+      </footer>
+    </main>
   </body>
 </html>
